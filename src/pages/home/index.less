@@ -1,0 +1,258 @@
+.index_view {
+  &_header {
+    width: 100%;
+    height: 576px;
+    background: linear-gradient(4.95deg, #1F2125 9.4%, #213B6D 89.75%);
+    padding: 78px 32px 0 0px;
+    box-sizing: border-box;
+    &_logo {
+      padding: 20px 0 20px 52px;
+      margin-bottom: 25.12px;
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      &_img {
+        width: 278.5px;
+        height: 54.88px;
+      }
+    }
+    &_info {
+      padding-left: 50px;
+      margin-bottom: 20px;
+      &_name {
+        height: 72px;
+        font-family: 'Source Han Sans CN';
+        font-style: normal;
+        font-weight: 500;
+        font-size: 40px;
+        line-height: 72px;
+        color: #C5CCDA;
+      }
+      &_title {
+        margin-top: -16px;
+        height: 130px;
+        line-height: 130px;
+        font-family: 'Source Han Sans CN';
+        font-style: normal;
+        font-weight: 700;
+        font-size: 72px;
+        color: #ffffff;
+      }
+    }
+    &_desc {
+      padding-left: 32px;
+      line-height: 38px;
+      font-family: 'Source Han Sans CN';
+      font-style: normal;
+      font-weight: 400;
+      font-size: 24px;
+      color: #798393;
+    }
+  }
+  &_main {
+    margin-top: -54px;
+    background: #F3F4F6;
+    border-radius: 24px 24px 0px 0px;
+    padding-bottom: calc(200px + constant(safe-area-inset-bottom));
+    padding-bottom: calc(200px + env(safe-area-inset-bottom));
+    padding-left: 32px;
+    padding-right: 32px;
+    &_tabs {
+      // position: sticky;
+      // top: 54.88px;
+      display: flex;
+      overflow-y: scroll;
+      gap: 18px;
+      padding-top: 64px;
+      // padding-left: 32px;
+      padding-right: 32px;
+      padding-bottom: 48px;
+      z-index: 999;
+      &_item {
+        padding: 16px 32px;
+        background: rgba(0, 0, 0, 0.06);
+        border-radius: 60px;
+        font-family: 'Source Han Sans CN';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 24px;
+        line-height: 32px;
+        color: rgba(0, 0, 0, 0.85);
+        -webkit-box-orient: vertical;
+        white-space: nowrap;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+      &_item.active {
+        background: rgba(0, 0, 0, 0.85);
+        color: #ffffff;
+      }
+    }
+    &_section {
+      box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.06);
+      border-radius: 48px;
+      overflow: hidden;
+      margin-bottom: 64px;
+      &_header {
+        padding: 48px 18px 16px 48px;
+        background: #ffffff;
+        &_title {
+          font-family: 'Source Han Sans CN';
+          font-style: normal;
+          font-weight: 700;
+          font-size: 48px;
+          height: 86px;
+          color: rgba(0, 0, 0, 0.85);
+          display: flex;
+          align-items: center;
+          &_desc {
+            margin-left: 16px;
+            font-family: 'Source Han Sans CN';
+            font-style: normal;
+            font-weight: 400;
+            font-size: 40px;
+            color: #6E7491;
+          }
+        }
+        &_introduce {
+          margin-top: 18px;
+          font-family: 'Source Han Sans CN';
+          font-style: normal;
+          font-weight: 400;
+          font-size: 28px;
+          line-height: 44px;
+          color: #6E7491;
+        }
+      }
+      &_info {
+        position: relative;
+        &_img {
+          width: 100%;
+          height: 498px;
+        }
+        &_tabs {
+          position: absolute;
+          width: 100%;
+          bottom: 88px;
+          left: 0;
+          padding-left: 96px;
+          box-sizing: border-box;
+          display: flex;
+          &_item {
+            text-align: center;
+            font-family: 'Source Han Sans CN';
+            font-style: normal;
+            font-weight: 400;
+            font-size: 24px;
+            line-height: 38px;
+            color: #6E7491;
+          }
+          &_item:nth-child(2) {
+            margin-left: 80px;
+            margin-right: 92px;
+          }
+        }
+        &_tips {
+          position: absolute;
+          width: 256px;
+          height: 82px;
+          background: #ffffff;
+          border-radius: 58px;
+          left: 50%;
+          bottom: 18px;
+          transform: translateX(-50%);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-family: 'Source Han Sans CN';
+          font-style: normal;
+          font-weight: 500;
+          font-size: 28px;
+          color: rgba(0, 0, 0, 0.85);
+        }
+        &_tips::after {
+          content: '';
+          position: absolute;
+          left: 50%;
+          transform: translateX(-50%);
+          bottom: -18px;
+          width: 0px;
+          height: 0px;
+          border-top: 20px solid #ffffff;
+          border-left: 20px solid transparent;
+          border-right: 20px solid transparent;
+        }
+      }
+    }
+    &_section.active {
+      box-shadow: 0px 20px 80px rgba(0, 0, 0, 0.16), 0px 12px 60px rgba(0, 0, 0, 0.12);
+    }
+  }
+  &_footer {
+    padding-top: 16px;
+    box-sizing: border-box;
+    position: fixed;
+    width: 612px;
+    height: 132px;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: calc(68px + constant(safe-area-inset-bottom));
+    bottom: calc(68px + env(safe-area-inset-bottom));
+    #canvas-complex {
+      position: absolute;
+      left: 0;
+      top: 0;
+      border-radius: 206px;
+      z-index: 99;
+    }
+    &_main {
+      // background: linear-gradient(256.16deg, #0D4BDD 13.69%, #4D86DA 91.55%);
+      // box-shadow: 0px 6px 10px rgba(45, 79, 130, 0.25);
+      border-radius: 206px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 199;
+      position: absolute;
+      text-align: center;
+      width: 100%;
+      height: 132px;
+      top: 0;
+    }
+    &_title {
+      font-family: 'Source Han Sans CN';
+      font-style: normal;
+      font-weight: 500;
+      font-size: 40px;
+      line-height: 64px;
+      color: #FFFFFF;
+    }
+    &_desc {
+      margin-top: -8px;
+      font-family: 'Source Han Sans CN';
+      font-style: normal;
+      font-weight: 400;
+      font-size: 24px;
+      line-height: 38px;
+      color: #ffffff;
+    }
+  }
+}
+.logo_fixed {
+  background: #ffffff;
+  position: fixed;
+  width: 100%;
+  left: 0;
+  top: 0;
+  box-sizing: border-box;
+}
+.tabs_fixed {
+  background: #ffffff;
+  position: fixed;
+  width: 100%;
+  left: 0;
+  padding-top: 64px;
+  top: 94.88px;
+  box-sizing: border-box;
+}
