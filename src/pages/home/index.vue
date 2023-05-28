@@ -20,53 +20,57 @@
       </p>
     </div>
     <div class="index_view_main">
-      <div
-        class="index_view_main_tabs"
-        :class="[tabsFixed ? 'tabs_fixed' : '']"
-        id="tabs"
-      >
+      <div class="index_view_main_tab" :class="[tabsFixed ? 'tabs_fixed' : '']">
         <div
-          class="index_view_main_tabs_item"
-          :class="[item.id == current ? 'active' : '']"
-          v-for="item in tabs"
+          class="index_view_main_tabs"
+          id="tabs"
+        >
+          <div
+            class="index_view_main_tabs_item"
+            :class="[item.id == state.current ? 'active' : '']"
+            v-for="item in tabs"
+            :key="item.id"
+            @click="onClickTabView(item.id)"
+          >
+            {{item.name}}
+          </div>
+        </div>
+        <div class="index_view_main_tab_mask"></div>
+      </div>
+      <div class="index_view_main_list">
+        <div
+          class="index_view_main_section"
+          :class="[item.id == state.current ? 'active' : '']"
+          v-for="item in list"
           :key="item.id"
           @click="goToView(item.id)"
+          :id="item.id"
         >
-          {{item.name}}
-        </div>
-      </div>
-      <div
-        class="index_view_main_section"
-        :class="[item.id == current ? 'active' : '']"
-        v-for="item in list"
-        :key="item.id"
-        @click="goToView(item.id)"
-        :id="item.id"
-      >
-        <div class="index_view_main_section_header">
-          <h3 class="index_view_main_section_header_title">
-            {{item.name}}
-            <span class="index_view_main_section_header_title_desc" v-if="item.desc">{{item.desc}}</span>
-          </h3>
-          <p class="index_view_main_section_header_introduce">{{item.introduce}}</p>
-        </div>
-        <div class="index_view_main_section_info">
-          <img
-            :src="item.img"
-            class="index_view_main_section_info_img"
-          />
-          <div class="index_view_main_section_info_tabs">
-            <div
-              class="index_view_main_section_info_tabs_item"
-              v-for="(json, index) in item.tags"
-              :key="index"
-              v-html="json"
-            ></div>
+          <div class="index_view_main_section_header">
+            <h3 class="index_view_main_section_header_title">
+              {{item.name}}
+              <span class="index_view_main_section_header_title_desc" v-if="item.desc">{{item.desc}}</span>
+            </h3>
+            <p class="index_view_main_section_header_introduce">{{item.introduce}}</p>
           </div>
-          <div class="index_view_main_section_info_tips" v-if="item.id == targetId && item.tip">{{item.tip}}</div>
+          <div class="index_view_main_section_info">
+            <img
+              :src="item.img"
+              class="index_view_main_section_info_img"
+            />
+            <div class="index_view_main_section_info_tabs">
+              <div
+                class="index_view_main_section_info_tabs_item"
+                v-for="(json, index) in item.tags"
+                :key="index"
+                v-html="json"
+              ></div>
+            </div>
+            <div class="index_view_main_section_info_tips" v-if="item.id == state.targetId && item.tip">{{item.tip}}</div>
+          </div>
         </div>
       </div>
-    </div>
+      </div>
     <div class="index_view_footer">
       <canvas id="canvas-complex" style="width: 100%; height:100%"></canvas>
       <div class="index_view_footer_main">
@@ -182,7 +186,9 @@ const state = reactive({
   sectionHeight: 0,
   seconds: 7200, 
   count: '',
-  siv: null
+  siv: null,
+  current: '',
+  targetId
 })
 
 onMounted(()=>{
@@ -202,14 +208,29 @@ onMounted(()=>{
   Time();
   init()
 })
-
-const goToView = (value) => {
-  current.value = value;
-  targetId.value = value;
+const onClickTabView = (value) => {
+  console.log('value', value)
+  state.current = value;
   let anchor = document.getElementById(value);
   document.body.scrollTop = anchor.offsetTop;
   document.documentElement.scrollTop = anchor.offsetTop;
-  window.scrollTo(0, anchor.offsetTop);
+  // window.scrollTo(0, anchor.offsetTop - tabsHeight.value - logoHeight.value);
+  window.scrollTo({
+    top: anchor.offsetTop - tabsHeight.value - logoHeight.value,
+	  behavior: 'smooth'
+  })
+}
+const goToView = (value) => {
+  state.current = value;
+  state.targetId = value;
+  let anchor = document.getElementById(value);
+  document.body.scrollTop = anchor.offsetTop;
+  document.documentElement.scrollTop = anchor.offsetTop;
+  // window.scrollTo(0, anchor.offsetTop - tabsHeight.value - logoHeight.value);
+  window.scrollTo({
+    top: anchor.offsetTop - tabsHeight.value - logoHeight.value,
+	  behavior: 'smooth'
+  })
 }
 
 const handleScroll =()=> {
@@ -226,12 +247,13 @@ const handleScroll =()=> {
   } else {
     tabsFixed.value = false;
   }
-  let top = scrollTop.value + windowHeight - ceilHeight - tabsHeight.value - logoHeight.value;
+  // let top = scrollTop.value + windowHeight - ceilHeight - tabsHeight.value - logoHeight.value;
+  let top = scrollTop.value + windowHeight - ceilHeight;
   let result = state.topList.filter(item=>{
     return item.value >= top;
   })[0]
   if (result && result.name) {
-    current.value = result.name;
+    state.current = result.name;
   }
 }
 
