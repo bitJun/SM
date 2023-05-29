@@ -193,9 +193,9 @@ const state = reactive({
 
 onMounted(()=>{
   window.addEventListener('scroll', handleScroll, true);
-  logoTop.value = document.getElementById('logo').offsetTop
+  logoTop.value = document.getElementById('logo').getBoundingClientRect().top
   logoHeight.value = document.getElementById('logo').clientHeight
-  tabsTop.value = document.getElementById('tabs').offsetTop
+  tabsTop.value = document.getElementById('tabs').getBoundingClientRect().top
   tabsHeight.value = document.getElementById('tabs').clientHeight
   let list = document.getElementsByClassName('index_view_main_section');
   for (let i = 0;i <list.length; i++) {
@@ -210,11 +210,9 @@ onMounted(()=>{
 })
 const onClickTabView = (value) => {
   state.current = value;
-  console.log('state.current', value)
   let anchor = document.getElementById(value);
   document.body.scrollTop = anchor.offsetTop;
   document.documentElement.scrollTop = anchor.offsetTop;
-  // window.scrollTo(0, anchor.offsetTop - tabsHeight.value - logoHeight.value);
   window.scrollTo({
     top: anchor.offsetTop - tabsHeight.value - logoHeight.value,
 	  behavior: 'smooth'
@@ -247,11 +245,20 @@ const handleScroll =()=> {
   } else {
     tabsFixed.value = false;
   }
-  // let top = scrollTop.value + windowHeight - ceilHeight - tabsHeight.value - logoHeight.value;
+  console.log('scrollTop.value', scrollTop.value, 'tabsTop.value', tabsTop.value)
   let top = scrollTop.value + windowHeight - ceilHeight;
-  let result = state.topList.filter(item=>{
-    return item.value >= top;
-  })[0]
+  let result = {};
+  state.topList.forEach((item, index) => {
+    if (state.topList[index + 1]) {
+      if (item.value < top && state.topList[index + 1].value > top) {
+        result = item
+      }
+    } else {
+      if (item.value < top) {
+        result = item
+      }
+    }
+  })
   if (result && result.name) {
     state.current = result.name;
   }
