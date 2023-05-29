@@ -192,7 +192,16 @@ const state = reactive({
 })
 
 onMounted(()=>{
-  window.addEventListener('scroll', handleScroll, true);
+  let timeId;
+  window.addEventListener('scroll', () => {
+    // 页面滚动停止100毫秒后才会执行下面的函数。
+    clearTimeout(timeId);
+    timeId = setTimeout(() => {
+      handleScroll();
+      console.log('执行完了哦');
+    }, 50);
+  } , true);
+  // window.addEventListener('scroll', handleScroll, true);
   logoTop.value = document.getElementById('logo').getBoundingClientRect().top
   logoHeight.value = document.getElementById('logo').clientHeight
   tabsTop.value = document.getElementById('tabs').getBoundingClientRect().top
@@ -264,18 +273,18 @@ const handleScroll =()=> {
 }
 
 const countDown = () => {
-    if (state.seconds == 0) {
-      clearInterval(state.siv)
-      state.siv = null
-      window.location.reload();
-    }
-    let h = parseInt((state.seconds / (60 * 60)) % 24);
-    h = h < 10 ? "0" + h : h;
-    let m = parseInt((state.seconds / 60) % 60);
-    m = m < 10 ? "0" + m : m;
-    let s = parseInt(state.seconds % 60);
-    s = s < 10 ? "0" + s : s;
-    state.count = h + ":" + m + ":" + s;
+  if (state.seconds == 0) {
+    clearInterval(state.siv)
+    state.siv = null
+    window.location.reload();
+  }
+  let h = parseInt((state.seconds / (60 * 60)) % 24);
+  h = h < 10 ? "0" + h : h;
+  let m = parseInt((state.seconds / 60) % 60);
+  m = m < 10 ? "0" + m : m;
+  let s = parseInt(state.seconds % 60);
+  s = s < 10 ? "0" + s : s;
+  state.count = h + ":" + m + ":" + s;
 }
 const Time = () => {
   countDown(); //解决刷新页面时，间隔一秒才会显示的问题
