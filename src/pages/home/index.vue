@@ -245,7 +245,6 @@ const handleScroll =()=> {
   } else {
     tabsFixed.value = false;
   }
-  console.log('scrollTop.value', scrollTop.value, 'tabsTop.value', tabsTop.value)
   let top = scrollTop.value + windowHeight - ceilHeight;
   let result = {};
   state.topList.forEach((item, index) => {
