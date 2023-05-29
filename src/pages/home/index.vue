@@ -209,8 +209,8 @@ onMounted(()=>{
   init()
 })
 const onClickTabView = (value) => {
-  console.log('value', value)
   state.current = value;
+  console.log('state.current', value)
   let anchor = document.getElementById(value);
   document.body.scrollTop = anchor.offsetTop;
   document.documentElement.scrollTop = anchor.offsetTop;
