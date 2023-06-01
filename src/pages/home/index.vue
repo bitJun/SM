@@ -298,13 +298,14 @@ const init = () => {
   let granimInstance = new Granim({
     element: '#canvas-complex',
     direction: 'custom',
-    customDirection: {
-      x0: '40%',
-      y0: '10px',
-      x1: '60%',
-      y1: '50%',
-    },
+    // customDirection: {
+    //   x0: '40%',
+    //   y0: '10px',
+    //   x1: '60%',
+    //   y1: '50%',
+    // },
     isPausedWhenNotInView: true,
+    direction: 'left-right',
     states : {
       "default-state": {
         gradients: [
@@ -317,7 +318,8 @@ const init = () => {
             { color: '#75E9E5', pos: .2 },
             { color: '#0D4BDD', pos: .75 }
           ],
-        ]
+        ],
+        transitionSpeed: 1200
       }
     }
   });
