@@ -53,7 +53,7 @@
             </h3>
             <p class="index_view_main_section_header_introduce">{{item.introduce}}</p>
           </div>
-          <div class="index_view_main_section_info">
+          <div class="index_view_main_section_info" :class="[item.id]" v-if="item.id != 'custom'">
             <img
               v-if="item.img"
               :src="item.img"
@@ -73,6 +73,74 @@
               </div>
             </div>
             <div class="index_view_main_section_info_tips" v-if="item.id == state.targetId && item.tip">{{item.tip}}</div>
+          </div>
+          <div v-else class="index_view_main_section_detail">
+            <div class="index_view_main_section_detail_block">
+              <img
+                :src="phone"
+                class="index_view_main_section_detail_block_phone"
+              />
+              <img
+                :src="img7"
+                class="index_view_main_section_detail_block_img"
+              />
+              <div class="index_view_main_section_detail_block_other">
+                <div class="index_view_main_section_detail_block_other_item" >
+                  <Swiper
+                    :autoplay="{delay: 1000, disableOnInteraction: bannerAuto.first}"
+                    :loop="true"
+                    class="index_view_main_section_detail_block_other_item_first"
+                  >
+                    <SwiperSlide>
+                      <img
+                        :src="img1"
+                      />
+                    </SwiperSlide>
+                    <SwiperSlide>
+                      <img
+                        :src="img2"
+                      />
+                    </SwiperSlide>
+                  </Swiper>
+                </div>
+                <div class="index_view_main_section_detail_block_other_item">
+                  <Swiper
+                    :autoplay="{delay: 1000, disableOnInteraction: bannerAuto.second}"
+                    :loop="true"
+                    class="index_view_main_section_detail_block_other_item_second"
+                  >
+                    <SwiperSlide>
+                      <img
+                        :src="img3"
+                      />
+                    </SwiperSlide>
+                    <SwiperSlide>
+                      <img
+                        :src="img4"
+                      />
+                    </SwiperSlide>
+                  </Swiper>
+                </div>
+              </div>
+            </div>
+            <div class="index_view_main_section_detail_block">
+              <Swiper
+                :autoplay="{delay: 1000, disableOnInteraction: bannerAuto.third}"
+                :loop="true"
+                class="index_view_main_section_detail_block_other_item_third"
+              >
+                <SwiperSlide>
+                  <img
+                    :src="img5"
+                  />
+                </SwiperSlide>
+                <SwiperSlide>
+                  <img
+                    :src="img6"
+                  />
+                </SwiperSlide>
+              </Swiper>
+            </div>
           </div>
         </div>
       </div>
@@ -121,7 +189,10 @@
       </div>
     </div>
     <div class="index_view_footer">
-      <canvas id="canvas-complex" style="width: 100%; height:100%"></canvas>
+      <img
+        :src="mask"
+        class="index_view_footer_mask"
+      />
       <div class="index_view_footer_main">
         <h4 class="index_view_footer_title">在线沟通</h4>
         <p class="index_view_footer_desc">{{state.count}} 内免费获取定制信息化解决方案</p>
@@ -130,8 +201,9 @@
   </div>
 </template>
 <script setup>
-import Granim from 'granim';
-import { ref, reactive, onMounted } from 'vue';
+import SwiperCore, { Autoplay } from 'swiper'
+import { Swiper, SwiperSlide } from 'swiper/vue';
+import { ref, reactive, onMounted, defineComponent, defineModel } from 'vue';
 import { useRoute } from 'vue-router';
 import logoPng from '@/assets/images/logo.png';
 import logoBluePng from '@/assets/images/logo_blue.png';
@@ -147,6 +219,24 @@ import company3 from '@/assets/images/company3.png';
 import company4 from '@/assets/images/company4.png';
 import logoSmall from '@/assets/images/logo_small.png';
 import bg3 from '@/assets/images/bg3.png';
+import phone from '@/assets/images/phone.png';
+import img1 from '@/assets/images/img1.png';
+import img2 from '@/assets/images/img2.png';
+import img3 from '@/assets/images/img3.png';
+import img4 from '@/assets/images/img4.png';
+import img5 from '@/assets/images/img5.png';
+import img6 from '@/assets/images/img6.png';
+import img7 from '@/assets/images/img7.png';
+import mask from '@/assets/images/mask.png';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/scrollbar';
+defineComponent({
+  Swiper,
+  SwiperSlide
+})
+SwiperCore.use(Autoplay);
 const Route = useRoute();
 const logoFixed = ref(false);
 const tabsFixed = ref(false);
@@ -154,6 +244,11 @@ const logoHeight = ref('');
 const tabsHeight = ref('');
 let logoTop = ref(0);
 let tabsTop = ref(0);
+const bannerAuto = reactive({
+  first: true,
+  second: false,
+  third: false,
+})
 const description = reactive({
   'A': {
     topdesc: '我们提供包含 ERP + MES + CRM + OA + 供应链管理的全面定制化解决方案，为企业构建最适合自身的一体化管理系统。',
@@ -232,11 +327,11 @@ const list = ref([
       },
       {
         img: icon2,
-        name: '量身打造<br/>更适合',
+        name: '从定制到上线<br/>快至1个月',
       },
       {
         img: icon3,
-        name: '从定制到上线<br/>快至1个月'
+        name: '量身打造<br/>更适合'
       }
     ],
     tip: '了解成本控制方案'
@@ -304,7 +399,6 @@ onMounted(()=>{
   }
   state.sectionHeight = list[0].clientHeight;
   Time();
-  init()
 })
 const onClickTabView = (value) => {
   state.current = value;
@@ -381,37 +475,6 @@ const Time = () => {
     state.seconds-=1;
     countDown()
   },1000)
-}
-
-const init = () => {
-  let granimInstance = new Granim({
-    element: '#canvas-complex',
-    direction: 'custom',
-    // customDirection: {
-    //   x0: '40%',
-    //   y0: '10px',
-    //   x1: '60%',
-    //   y1: '50%',
-    // },
-    isPausedWhenNotInView: true,
-    direction: 'left-right',
-    states : {
-      "default-state": {
-        gradients: [
-          [
-            { color: '#0D4BDD', pos: .2 },
-            { color: '#75E9E5', pos: .8 },
-            { color: '#0D4BDD', pos: 1 }
-          ], [
-            { color: '#0D4BDD', pos: 0 },
-            { color: '#75E9E5', pos: .2 },
-            { color: '#0D4BDD', pos: .75 }
-          ],
-        ],
-        transitionSpeed: 1200
-      }
-    }
-  });
 }
 
 </script>
