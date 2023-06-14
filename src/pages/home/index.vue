@@ -89,6 +89,7 @@
                   <Swiper
                     :autoplay="{delay: 1000, disableOnInteraction: bannerAuto.first}"
                     :loop="true"
+                    :speed="1000"
                     class="index_view_main_section_detail_block_other_item_first"
                   >
                     <SwiperSlide>
@@ -107,6 +108,7 @@
                   <Swiper
                     :autoplay="{delay: 1000, disableOnInteraction: bannerAuto.second}"
                     :loop="true"
+                    :speed="2000"
                     class="index_view_main_section_detail_block_other_item_second"
                   >
                     <SwiperSlide>
@@ -127,6 +129,7 @@
               <Swiper
                 :autoplay="{delay: 1000, disableOnInteraction: bannerAuto.third}"
                 :loop="true"
+                :speed="3000"
                 class="index_view_main_section_detail_block_other_item_third"
               >
                 <SwiperSlide>
@@ -399,7 +402,11 @@ onMounted(()=>{
   }
   state.sectionHeight = list[0].clientHeight;
   Time();
-})
+  handleSwiper();
+});
+const handleSwiper = () => {
+
+};
 const onClickTabView = (value) => {
   state.current = value;
   let anchor = document.getElementById(value);
@@ -427,7 +434,7 @@ const handleScroll =()=> {
   scrollTop.value = document.documentElement.scrollTop;
   let windowHeight = window.innerHeight;
   let ceilHeight = windowHeight - state.sectionHeight;
-  if (scrollTop.value >= logoTop.value) {
+  if (scrollTop.value >= tabsTop.value - logoTop.value) {
     logoFixed.value = true;
   } else {
     logoFixed.value = false;
