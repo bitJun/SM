@@ -89,7 +89,6 @@
                   <Swiper
                     :autoplay="{delay: 1000, disableOnInteraction: bannerAuto.first}"
                     :loop="true"
-                    :speed="1000"
                     class="index_view_main_section_detail_block_other_item_first"
                   >
                     <SwiperSlide>
@@ -106,9 +105,8 @@
                 </div>
                 <div class="index_view_main_section_detail_block_other_item">
                   <Swiper
-                    :autoplay="{delay: 1000, disableOnInteraction: bannerAuto.second}"
+                    :autoplay="{delay: 2000, disableOnInteraction: bannerAuto.second}"
                     :loop="true"
-                    :speed="2000"
                     class="index_view_main_section_detail_block_other_item_second"
                   >
                     <SwiperSlide>
@@ -127,9 +125,9 @@
             </div>
             <div class="index_view_main_section_detail_block">
               <Swiper
-                :autoplay="{delay: 1000, disableOnInteraction: bannerAuto.third}"
+                :autoplay="{delay: 3000, disableOnInteraction: bannerAuto.third}"
                 :loop="true"
-                :speed="3000"
+                :speed="1000"
                 class="index_view_main_section_detail_block_other_item_third"
               >
                 <SwiperSlide>
@@ -247,6 +245,7 @@ const logoHeight = ref('');
 const tabsHeight = ref('');
 let logoTop = ref(0);
 let tabsTop = ref(0);
+
 const bannerAuto = reactive({
   first: true,
   second: false,

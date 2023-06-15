@@ -144,7 +144,8 @@
       &_info {
         position: relative;
         &_img {
-          width: 100%;
+          width: 686px;
+          height: auto;
         }
         &_tabs {
           // position: absolute;
@@ -173,19 +174,19 @@
             }
           }
           &_item:first-child .index_view_main_section_info_tabs_item_img {
-            width: 125.12px;
-            height: 122.58px;
-            margin-bottom: 26.94px;
+            width: 154.52px;
+            height: 154.52px;
+            margin-bottom: 28.64px;
           }
           &_item:nth-child(2) .index_view_main_section_info_tabs_item_img {
-            width: 114.32px;
-            height: 116.4px;
-            margin-bottom: 30.02px;
+            width: 160.28px;
+            height: 134.7px;
+            margin-bottom: 38.56px;
           }
           &_item:last-child .index_view_main_section_info_tabs_item_img {
-            width: 112.7px;
-            height: 100.54px;
-            margin-bottom: 37.96px;
+            width: 150.62px;
+            height: 128.84px;
+            margin-bottom: 41.48px;
           }
         }
         &_tips {
@@ -415,8 +416,12 @@
       top: -68.42px;
       -webkit-animation: linear infinite alternate;
       -webkit-animation-name: run;
-      -webkit-animation-duration: 5s;
-      z-index: 19;
+      -webkit-animation-duration: 1.2s;
+      animation-iteration-count:1;/*动画只执行一次*/
+      -moz-animation-iteration-count:1;
+      -webkit-animation-iteration-count:1;
+      -o-animation-iteration-count:1;
+      z-index: 1000;
     }
     @-webkit-keyframes run {
       0% {
