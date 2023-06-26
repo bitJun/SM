@@ -87,7 +87,7 @@
               <div class="index_view_main_section_detail_block_other">
                 <div class="index_view_main_section_detail_block_other_item" >
                   <Swiper
-                    :autoplay="{delay: 1000, disableOnInteraction: bannerAuto.first}"
+                    :autoplay="{delay: 4000, disableOnInteraction: bannerAuto.first}"
                     :loop="true"
                     class="index_view_main_section_detail_block_other_item_first"
                   >
@@ -105,7 +105,7 @@
                 </div>
                 <div class="index_view_main_section_detail_block_other_item">
                   <Swiper
-                    :autoplay="{delay: 2000, disableOnInteraction: bannerAuto.second}"
+                    :autoplay="{delay: 5000, disableOnInteraction: bannerAuto.second}"
                     :loop="true"
                     class="index_view_main_section_detail_block_other_item_second"
                   >
@@ -396,7 +396,7 @@ onMounted(()=>{
   for (let i = 0;i <list.length; i++) {
     state.topList.push({
       name: list[i].getAttribute('id'),
-      value: list[i].offsetTop
+      value: list[i].offsetTop - tabsHeight.value - logoHeight.value
     });
   }
   state.sectionHeight = list[0].clientHeight;
@@ -443,7 +443,7 @@ const handleScroll =()=> {
   } else {
     tabsFixed.value = false;
   }
-  let top = scrollTop.value + windowHeight - ceilHeight;
+  let top = scrollTop.value + ceilHeight;
   let result = {};
   state.topList.forEach((item, index) => {
     if (state.topList[index + 1]) {
