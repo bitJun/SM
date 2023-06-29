@@ -12,8 +12,8 @@ const routes = [
 	},
 ]
 
-const router = createRouter({
-	history: createWebHistory('/'),
+const router = createRouter({  
+	history: createWebHashHistory(),
 	routes
 })
 
