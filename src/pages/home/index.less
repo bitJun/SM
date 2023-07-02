@@ -1,4 +1,13 @@
 .index_view {
+  &_fixed {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    opacity: 0;
+    background: #ffffff;
+    z-index: 99;
+  }
   &_header {
     width: 100%;
     height: 640px;
@@ -144,7 +153,7 @@
       &_info {
         position: relative;
         &_img {
-          width: 686px;
+          width: 100%;
           height: auto;
         }
         &_tabs {
@@ -225,7 +234,7 @@
       }
       &_detail {
         background: #F7F9FC;
-        height: 824px;
+        // height: 824px;
         position: relative;
         overflow: hidden;
         padding: 37.76px 37px 36px 37px;
@@ -240,8 +249,10 @@
           }
           &_img {
             position: absolute;
-            right: -24px;
-            top: -118.24px;
+            // right: -24px;
+            // top: -118.24px;
+            right: 0;
+            top: 0;
             width: 200px;
             height: 304px;
           }
@@ -266,11 +277,13 @@
                 }
               }
               &_third {
-                width: 612px;
-                height: 302px; 
+                // width: 612px;
+                // height: 302px; 
+                width: 100%;
                 img {
-                  width: 612px;
-                  height: 302px; 
+                  // width: 612px;
+                  // height: 302px; 
+                  width: 100%;
                 }
               }
             }
@@ -279,8 +292,9 @@
             }
           }
         }
-        &_block:first-child {
-          margin-bottom: 33.52px;
+        &_block:last-child {
+          margin-top: 33.52px;
+          flex: 1;
         }
       }
     }
@@ -306,16 +320,20 @@
       }
     }
     &_company {
-      height: 1090px;
+      // height: 1090px;
       position: relative;
       overflow: hidden;
+      background: url('../../assets/images/company_bg.png');
+      background-size: cover;
+      padding-bottom: 200px;
+      box-sizing: border-box;
       &_section {
         z-index: 899;
         padding-top: 48px;
         box-sizing: border-box;
         height: 424px;
         width: 100%;
-        background: linear-gradient(180.16deg, #FFFFFF 0.14%, rgba(255, 255, 255, 0.859219) 60.39%, rgba(255, 255, 255, 0) 99.86%);
+        // background: linear-gradient(180.16deg, #FFFFFF 0.14%, rgba(255, 255, 255, 0.859219) 60.39%, rgba(255, 255, 255, 0) 99.86%);
         position: relative;
         &_info {
           margin-bottom: 8px;
@@ -363,7 +381,7 @@
         margin-top: -26px;
         width: 100%;
         height: 750px;
-        background: linear-gradient(89.95deg, rgba(108, 152, 255, 0.95) 0.04%, rgba(255, 255, 255, 0.95) 0.05%, rgba(86, 137, 255, 0.25) 96.27%);
+        // background: linear-gradient(89.95deg, rgba(108, 152, 255, 0.95) 0.04%, rgba(255, 255, 255, 0.95) 0.05%, rgba(86, 137, 255, 0.25) 96.27%);
         // transform: matrix(0, -1, -1, 0, 0, 0);
         z-index: 990;
         &_list {
@@ -374,9 +392,11 @@
           flex-wrap: wrap;
           justify-content: space-between;
           &_item {
-            width: 333.44px;
-            height: 185.4px;
-            margin-bottom: 21.24px;
+            width: 50%;
+            box-sizing: border-box;
+            &_img {
+              width: 100%;
+            }
           }
         }
         &_logo {
@@ -420,7 +440,7 @@
       -webkit-animation: linear infinite alternate;
       -webkit-animation-name: run;
       -webkit-animation-duration: 1.2s;
-      animation-iteration-count:1;/*动画只执行一次*/
+      animation-iteration-count: 1;/*动画只执行一次*/
       -moz-animation-iteration-count:1;
       -webkit-animation-iteration-count:1;
       -o-animation-iteration-count:1;

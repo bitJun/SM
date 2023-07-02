@@ -1,9 +1,34 @@
 <template>
   <div class="index_view">
+    <div class="index_view_fixed" :style="{opacity: opacity}">
+      <div
+        class="index_view_header_logo"
+      >
+        <img
+          :src="logoFixed ? logoBluePng : logoPng"
+          class="index_view_header_logo_img"
+        />
+      </div>
+      <div class="index_view_main_tab">
+        <div
+          class="index_view_main_tabs"
+        >
+          <div
+            class="index_view_main_tabs_item"
+            :class="[item.id == state.current ? 'active' : '']"
+            v-for="item in tabs"
+            :key="item.id"
+            @click="onClickTabView(item.id)"
+          >
+            {{item.name}}
+          </div>
+        </div>
+        <div class="index_view_main_tab_mask"></div>
+      </div>
+    </div>
     <div class="index_view_header">
       <div
         class="index_view_header_logo"
-        :class="[logoFixed ? 'logo_fixed' : '']"
         id="logo"
       >
         <img
@@ -20,7 +45,7 @@
       </p>
     </div>
     <div class="index_view_main">
-      <div class="index_view_main_tab" :class="[tabsFixed ? 'tabs_fixed' : '']">
+      <div class="index_view_main_tab">
         <div
           class="index_view_main_tabs"
           id="tabs"
@@ -87,7 +112,8 @@
               <div class="index_view_main_section_detail_block_other">
                 <div class="index_view_main_section_detail_block_other_item" >
                   <Swiper
-                    :autoplay="{delay: 4000, disableOnInteraction: bannerAuto.first}"
+                    ref="swiper1"
+                    :autoplay="true"
                     :loop="true"
                     class="index_view_main_section_detail_block_other_item_first"
                   >
@@ -105,7 +131,8 @@
                 </div>
                 <div class="index_view_main_section_detail_block_other_item">
                   <Swiper
-                    :autoplay="{delay: 5000, disableOnInteraction: bannerAuto.second}"
+                    ref="swiper2"
+                    :autoplay="true"
                     :loop="true"
                     class="index_view_main_section_detail_block_other_item_second"
                   >
@@ -125,7 +152,8 @@
             </div>
             <div class="index_view_main_section_detail_block">
               <Swiper
-                :autoplay="{delay: 3000, disableOnInteraction: bannerAuto.third}"
+                ref="swiper3"
+                :autoplay="true"
                 :loop="true"
                 :speed="1000"
                 class="index_view_main_section_detail_block_other_item_third"
@@ -154,30 +182,38 @@
       </div>
       <div class="index_view_main_company">
         <div class="index_view_main_company_section">
-          <span class="index_view_main_company_section_left">“</span>
+          <!-- <span class="index_view_main_company_section_left">“</span> -->
           <p class="index_view_main_company_section_info">每天有各行各业数千家企业</p>
           <p class="index_view_main_company_section_info">从跨国公司到初创企业</p>
           <p class="index_view_main_company_section_info">使用颐信巧思管理企业</p>
-          <span class="index_view_main_company_section_right">”</span>
+          <!-- <span class="index_view_main_company_section_right">”</span> -->
         </div>
         <div class="index_view_main_company_section2">
           <div class="index_view_main_company_section2_list">
-            <img
-              :src="company1"
-              class="index_view_main_company_section2_list_item"
-            />
-            <img
-              :src="company2"
-              class="index_view_main_company_section2_list_item"
-            />
-            <img
-              :src="company3"
-              class="index_view_main_company_section2_list_item"
-            />
-            <img
-              :src="company4"
-              class="index_view_main_company_section2_list_item"
-            />
+            <div class="index_view_main_company_section2_list_item">
+              <img
+                :src="company1"
+                class="index_view_main_company_section2_list_item_img"
+              />
+            </div>
+            <div class="index_view_main_company_section2_list_item">
+              <img
+                :src="company2"
+                class="index_view_main_company_section2_list_item_img"
+              />
+            </div>
+            <div class="index_view_main_company_section2_list_item">
+              <img
+                :src="company3"
+                class="index_view_main_company_section2_list_item_img"
+              />
+            </div>
+            <div class="index_view_main_company_section2_list_item">
+              <img
+                :src="company4"
+                class="index_view_main_company_section2_list_item_img"
+              />
+            </div>
           </div>
           <div class="index_view_main_company_section2_logo">
             <img
@@ -186,7 +222,7 @@
             />
           </div>
         </div>
-        <img :src="bg3" class="index_view_main_company_bg" />
+        <!-- <img :src="bg3" class="index_view_main_company_bg" /> -->
       </div>
     </div>
     <div class="index_view_footer">
@@ -203,8 +239,9 @@
 </template>
 <script setup>
 import SwiperCore, { Autoplay } from 'swiper'
+// import Swiper from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/vue';
-import { ref, reactive, onMounted, defineComponent, defineModel } from 'vue';
+import { ref, reactive, onMounted, defineComponent, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import logoPng from '@/assets/images/logo.png';
 import logoBluePng from '@/assets/images/logo_blue.png';
@@ -243,14 +280,14 @@ const logoFixed = ref(false);
 const tabsFixed = ref(false);
 const logoHeight = ref('');
 const tabsHeight = ref('');
+const currentSwiper = ref(1);
 let logoTop = ref(0);
 let tabsTop = ref(0);
+let opacity = ref(0);
+const swiper1 = ref(null);
+const swiper2 = ref(null);
+const swiper3 = ref(null);
 
-const bannerAuto = reactive({
-  first: true,
-  second: false,
-  third: false,
-})
 const description = reactive({
   'A': {
     topdesc: '我们提供包含 ERP + MES + CRM + OA + 供应链管理的全面定制化解决方案，为企业构建最适合自身的一体化管理系统。',
@@ -284,18 +321,6 @@ const tabs = ref([
     id: 'fast_cheap',
     name: '多快好省'
   },
-  // {
-  //   id: 'industry',
-  //   name: '行业选择'
-  // },
-  // {
-  //   id: 'peers',
-  //   name: '同行对比'
-  // },
-  // {
-  //   id: 'trend',
-  //   name: '未来趋势'
-  // }
 ]);
 const list = ref([
   {
@@ -337,34 +362,8 @@ const list = ref([
       }
     ],
     tip: '了解成本控制方案'
-  },
-  // {
-  //   id: 'industry',
-  //   name: '行业选择',
-  //   desc: '',
-  //   introduce: '各行各业数以千计企业的选择。',
-  //   img: 'https://p8.qhimg.com/dmfd/165_90_75/t014d3a7bd566a2f45c.webp?size=604x502',
-  //   tags: [],
-  //   tip: '了解行业定制方案'
-  // },
-  // {
-  //   id: 'peers',
-  //   name: '同行对比',
-  //   desc: '',
-  //   introduce: '文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本。',
-  //   img: 'https://p8.qhimg.com/dmfd/165_90_75/t014d3a7bd566a2f45c.webp?size=604x502',
-  //   tags: []
-  // },
-  // {
-  //   id: 'trend',
-  //   name: '未来趋势',
-  //   desc: 'AIGC',
-  //   introduce: '文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本。',
-  //   img: 'https://p8.qhimg.com/dmfd/165_90_75/t014d3a7bd566a2f45c.webp?size=604x502',
-  //   tags: []
-  // }
+  }
 ]);
-const current = ref('');
 const targetId = ref('');
 const scrollTop = ref('');
 const state = reactive({
@@ -380,14 +379,11 @@ const state = reactive({
 onMounted(()=>{
   let timeId;
   window.addEventListener('scroll', () => {
-    // 页面滚动停止100毫秒后才会执行下面的函数。
     clearTimeout(timeId);
     timeId = setTimeout(() => {
       handleScroll();
-      console.log('执行完了哦');
     }, 50);
   } , true);
-  // window.addEventListener('scroll', handleScroll, true);
   logoTop.value = document.getElementById('logo').getBoundingClientRect().top
   logoHeight.value = document.getElementById('logo').clientHeight
   tabsTop.value = document.getElementById('tabs').getBoundingClientRect().top
@@ -401,11 +397,7 @@ onMounted(()=>{
   }
   state.sectionHeight = list[0].clientHeight;
   Time();
-  handleSwiper();
 });
-const handleSwiper = () => {
-
-};
 const onClickTabView = (value) => {
   state.current = value;
   let anchor = document.getElementById(value);
@@ -430,7 +422,20 @@ const goToView = (value) => {
 }
 
 const handleScroll =()=> {
+  let offsetHeight = tabsTop.value + tabsHeight.value;
   scrollTop.value = document.documentElement.scrollTop;
+  if (scrollTop.value < tabsTop.value) {
+    console.log(123)
+    opacity.value = 0;
+  }
+  if (scrollTop.value < offsetHeight && scrollTop.value > tabsTop.value) {
+    console.log(456)
+    opacity.value = scrollTop.value / offsetHeight;
+  }
+  if (scrollTop.value > offsetHeight) {
+    console.log(789)
+    opacity.value = 1;
+  }
   let windowHeight = window.innerHeight;
   let ceilHeight = windowHeight - state.sectionHeight;
   if (scrollTop.value >= tabsTop.value - logoTop.value) {
@@ -483,6 +488,20 @@ const Time = () => {
   },1000)
 }
 
+watch(currentSwiper, (newVal) => {
+  console.log('swiper1', )
+  swiper1.value.autoplay = false
+  // 暂停前一个swiper
+  const prevSwiper = newVal === 1 ? 3 : newVal - 1;
+  this.$refs[`swiper${prevSwiper}`].stop();
+  // 开始当前swiper
+  this.$refs[`swiper${newVal}`].start();
+});
+
+// 切换swiper
+setInterval(() => {
+  currentSwiper.value = currentSwiper.value === 3 ? 1 : currentSwiper.value + 1;
+}, 3000);
 </script>
 <style lang="less" scoped>
 @import './index.less';
