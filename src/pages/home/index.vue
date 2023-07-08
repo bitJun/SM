@@ -440,8 +440,9 @@ nextTick(()=>{
   let list = document.getElementsByClassName('index_view_main_section');
   for (let i = 0;i <tabs.value.length; i++) {
     let value = document.getElementById(tabs.value[i].id).offsetTop
+    console.log('value', value)
     if (i > 0) {
-      value =  state.topList[i - 1].value + value
+      value =  document.getElementById(tabs.value[i-1].id).offsetTop + value
     }
     state.topList.push({
       name: tabs.value[i].id,
@@ -471,7 +472,7 @@ const goToView = (value) => {
   document.documentElement.scrollTop = anchor.offsetTop;
   // window.scrollTo(0, anchor.offsetTop - tabsHeight.value - logoHeight.value);
   window.scrollTo({
-    top: anchor.offsetTop - tabsHeight.value - logoHeight.value,
+    top: anchor.offsetTop - tabsHeight.value,
 	  behavior: 'smooth'
   })
 }
