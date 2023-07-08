@@ -105,6 +105,7 @@
               class="index_view_main_section_content_bg"
             />
             <Swiper
+              ref="swiper1"
               :autoplay="swiper1Playing"
               @transitionEnd="pauseSwiper1"
               :loop="true"
@@ -227,7 +228,7 @@
 import SwiperCore, { Autoplay } from 'swiper'
 // import Swiper from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/vue';
-import { ref, reactive, onMounted, defineComponent, watch } from 'vue';
+import { ref, reactive, onMounted, defineComponent, nextTick } from 'vue';
 import { useRoute } from 'vue-router';
 import logoPng from '@/assets/images/logo.png';
 import logoBluePng from '@/assets/images/logo_blue.png';
@@ -356,34 +357,44 @@ const state = reactive({
   targetId
 })
 
+const swiper1 = ref(null);
+const swiper2 = ref(null);
+const swiper3 = ref(null);
 const swiper1Playing = ref(true);
 const swiper2Playing = ref(false);
 const swiper3Playing = ref(false);
 const pauseSwiper1 = () => {
+  console.log(11)
   swiper1Playing.value = false;
   swiper2Playing.value = true;
 };
 
 const pauseSwiper2 = () => {
+  console.log(22)
   swiper2Playing.value = false;
   swiper3Playing.value = true;
 };
 
 const pauseSwiper3 = () => {
+  console.log(33)
   swiper3Playing.value = false;
   swiper1Playing.value = true;
 };
 onMounted(()=>{
   swiper1Playing.value = true;
-  setInterval(() => {
-    if (swiper1Playing.value) {
-      pauseSwiper1();
-    } else if (swiper2Playing.value) {
-      pauseSwiper2();
-    } else if (swiper3Playing.value) {
-      pauseSwiper3();
-    }
-  }, 2000);
+  nextTick(()=>{
+    setInterval(() => {
+      console.log('swiper1', swiper1.value)
+      // console.log('swiper1Playing', swiper1Playing)
+      if (swiper1Playing.value) {
+        pauseSwiper1();
+      } else if (swiper2Playing.value) {
+        pauseSwiper2();
+      } else if (swiper3Playing.value) {
+        pauseSwiper3();
+      }
+    },4000);
+  })
   let timeId;
   window.addEventListener('scroll', () => {
     clearTimeout(timeId);
@@ -405,7 +416,6 @@ onMounted(()=>{
     });
   }
   state.sectionHeight = list[0].clientHeight;
-  console.log('state.topList', state.topList);
   Time();
 });
 const onClickTabView = (value) => {
