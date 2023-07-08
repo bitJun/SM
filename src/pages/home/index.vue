@@ -9,7 +9,7 @@
           class="index_view_header_logo_img"
         />
       </div>
-      <div class="index_view_main_tab" v-if="opacity== 1">
+      <div class="index_view_main_tab">
         <div
           class="index_view_main_tabs"
         >
