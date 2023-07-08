@@ -5,11 +5,11 @@
         class="index_view_header_logo"
       >
         <img
-          :src="logoFixed ? logoBluePng : logoPng"
+          :src="opacity == 1 ? logoBluePng : logoPng"
           class="index_view_header_logo_img"
         />
       </div>
-      <div class="index_view_main_tab">
+      <div class="index_view_main_tab" v-if="opacity== 1">
         <div
           class="index_view_main_tabs"
         >
@@ -32,7 +32,7 @@
         id="logo"
       >
         <img
-          :src="logoFixed ? logoBluePng : logoPng"
+          :src="opacity == 1 ? logoBluePng : logoPng"
           class="index_view_header_logo_img"
         />
       </div>
@@ -99,77 +99,63 @@
             </div>
             <div class="index_view_main_section_info_tips" v-if="item.id == state.targetId && item.tip">{{item.tip}}</div>
           </div>
-          <div v-else class="index_view_main_section_detail">
-            <div class="index_view_main_section_detail_block">
-              <img
-                :src="phone"
-                class="index_view_main_section_detail_block_phone"
-              />
-              <img
-                :src="img7"
-                class="index_view_main_section_detail_block_img"
-              />
-              <div class="index_view_main_section_detail_block_other">
-                <div class="index_view_main_section_detail_block_other_item" >
-                  <Swiper
-                    ref="swiper1"
-                    :autoplay="true"
-                    :loop="true"
-                    class="index_view_main_section_detail_block_other_item_first"
-                  >
-                    <SwiperSlide>
-                      <img
-                        :src="img1"
-                      />
-                    </SwiperSlide>
-                    <SwiperSlide>
-                      <img
-                        :src="img2"
-                      />
-                    </SwiperSlide>
-                  </Swiper>
-                </div>
-                <div class="index_view_main_section_detail_block_other_item">
-                  <Swiper
-                    ref="swiper2"
-                    :autoplay="true"
-                    :loop="true"
-                    class="index_view_main_section_detail_block_other_item_second"
-                  >
-                    <SwiperSlide>
-                      <img
-                        :src="img3"
-                      />
-                    </SwiperSlide>
-                    <SwiperSlide>
-                      <img
-                        :src="img4"
-                      />
-                    </SwiperSlide>
-                  </Swiper>
-                </div>
-              </div>
-            </div>
-            <div class="index_view_main_section_detail_block">
-              <Swiper
-                ref="swiper3"
-                :autoplay="true"
-                :loop="true"
-                :speed="1000"
-                class="index_view_main_section_detail_block_other_item_third"
-              >
-                <SwiperSlide>
-                  <img
-                    :src="img5"
-                  />
-                </SwiperSlide>
-                <SwiperSlide>
-                  <img
-                    :src="img6"
-                  />
-                </SwiperSlide>
-              </Swiper>
-            </div>
+          <div v-else class="index_view_main_section_content">
+            <img
+              :src="sectionBg"
+              class="index_view_main_section_content_bg"
+            />
+            <Swiper
+              :autoplay="swiper1Playing"
+              @transitionEnd="pauseSwiper1"
+              :loop="true"
+              class="index_view_main_section_content_first"
+            >
+              <SwiperSlide>
+                <img
+                  :src="img1"
+                />
+              </SwiperSlide>
+              <SwiperSlide>
+                <img
+                  :src="img2"
+                />
+              </SwiperSlide>
+            </Swiper>
+            <Swiper
+              :autoplay="swiper2Playing"
+              @transitionEnd="pauseSwiper2"
+              :loop="true"
+              class="index_view_main_section_content_second"
+            >
+              <SwiperSlide>
+                <img
+                  :src="img3"
+                />
+              </SwiperSlide>
+              <SwiperSlide>
+                <img
+                  :src="img4"
+                />
+              </SwiperSlide>
+            </Swiper>
+            <Swiper
+              :autoplay="swiper3Playing"
+              @transitionEnd="pauseSwiper3"
+              :loop="true"
+              :speed="1000"
+              class="index_view_main_section_content_third"
+            >
+              <SwiperSlide>
+                <img
+                  :src="img5"
+                />
+              </SwiperSlide>
+              <SwiperSlide>
+                <img
+                  :src="img6"
+                />
+              </SwiperSlide>
+            </Swiper>
           </div>
         </div>
       </div>
@@ -256,16 +242,15 @@ import company2 from '@/assets/images/company2.png';
 import company3 from '@/assets/images/company3.png';
 import company4 from '@/assets/images/company4.png';
 import logoSmall from '@/assets/images/logo_small.png';
-import bg3 from '@/assets/images/bg3.png';
-import phone from '@/assets/images/phone.webp';
-import img1 from '@/assets/images/img1.webp';
-import img2 from '@/assets/images/img2.webp';
-import img3 from '@/assets/images/img3.webp';
-import img4 from '@/assets/images/img4.webp';
-import img5 from '@/assets/images/img5.webp';
+import img1 from '@/assets/images/img1.png';
+import img2 from '@/assets/images/img2.png';
+import img3 from '@/assets/images/img3.png';
+import img4 from '@/assets/images/img4.png';
+import img5 from '@/assets/images/img5.png';
 import img6 from '@/assets/images/img6.png';
 import img7 from '@/assets/images/img7.png';
 import mask from '@/assets/images/mask.png';
+import sectionBg from '@/assets/images/sectionBg.png';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
@@ -276,17 +261,12 @@ defineComponent({
 })
 SwiperCore.use(Autoplay);
 const Route = useRoute();
-const logoFixed = ref(false);
-const tabsFixed = ref(false);
 const logoHeight = ref('');
 const tabsHeight = ref('');
 const currentSwiper = ref(1);
 let logoTop = ref(0);
 let tabsTop = ref(0);
 let opacity = ref(0);
-const swiper1 = ref(null);
-const swiper2 = ref(null);
-const swiper3 = ref(null);
 
 const description = reactive({
   'A': {
@@ -376,14 +356,43 @@ const state = reactive({
   targetId
 })
 
+const swiper1Playing = ref(true);
+const swiper2Playing = ref(false);
+const swiper3Playing = ref(false);
+const pauseSwiper1 = () => {
+  swiper1Playing.value = false;
+  swiper2Playing.value = true;
+};
+
+const pauseSwiper2 = () => {
+  swiper2Playing.value = false;
+  swiper3Playing.value = true;
+};
+
+const pauseSwiper3 = () => {
+  swiper3Playing.value = false;
+  swiper1Playing.value = true;
+};
 onMounted(()=>{
+  swiper1Playing.value = true;
+  setInterval(() => {
+    if (swiper1Playing.value) {
+      pauseSwiper1();
+    } else if (swiper2Playing.value) {
+      pauseSwiper2();
+    } else if (swiper3Playing.value) {
+      pauseSwiper3();
+    }
+  }, 2000);
   let timeId;
   window.addEventListener('scroll', () => {
     clearTimeout(timeId);
     timeId = setTimeout(() => {
       handleScroll();
     }, 50);
+    onScroll();
   } , true);
+
   logoTop.value = document.getElementById('logo').getBoundingClientRect().top
   logoHeight.value = document.getElementById('logo').clientHeight
   tabsTop.value = document.getElementById('tabs').getBoundingClientRect().top
@@ -392,10 +401,11 @@ onMounted(()=>{
   for (let i = 0;i <list.length; i++) {
     state.topList.push({
       name: list[i].getAttribute('id'),
-      value: list[i].offsetTop - tabsHeight.value - logoHeight.value
+      value: list[i].offsetTop
     });
   }
   state.sectionHeight = list[0].clientHeight;
+  console.log('state.topList', state.topList);
   Time();
 });
 const onClickTabView = (value) => {
@@ -421,33 +431,19 @@ const goToView = (value) => {
   })
 }
 
-const handleScroll =()=> {
-  let offsetHeight = tabsTop.value + tabsHeight.value;
-  scrollTop.value = document.documentElement.scrollTop;
-  if (scrollTop.value < tabsTop.value) {
-    console.log(123)
-    opacity.value = 0;
-  }
-  if (scrollTop.value < offsetHeight && scrollTop.value > tabsTop.value) {
-    console.log(456)
-    opacity.value = scrollTop.value / offsetHeight;
-  }
-  if (scrollTop.value > offsetHeight) {
-    console.log(789)
+const onScroll = () => {
+  let scrollTop = document.documentElement.scrollTop;
+  if (scrollTop > tabsTop.value) {
     opacity.value = 1;
+  } else {
+    opacity.value = scrollTop / tabsTop.value;
   }
+}
+
+const handleScroll =()=> {
+  scrollTop.value = document.documentElement.scrollTop;
   let windowHeight = window.innerHeight;
   let ceilHeight = windowHeight - state.sectionHeight;
-  if (scrollTop.value >= tabsTop.value - logoTop.value) {
-    logoFixed.value = true;
-  } else {
-    logoFixed.value = false;
-  }
-  if (scrollTop.value >= tabsTop.value) {
-    tabsFixed.value = true;
-  } else {
-    tabsFixed.value = false;
-  }
   let top = scrollTop.value + ceilHeight;
   let result = {};
   state.topList.forEach((item, index) => {
@@ -481,27 +477,13 @@ const countDown = () => {
   state.count = h + ":" + m + ":" + s;
 }
 const Time = () => {
-  countDown(); //解决刷新页面时，间隔一秒才会显示的问题
+  countDown();
   state.siv = setInterval(()=>{
     state.seconds-=1;
     countDown()
   },1000)
 }
 
-watch(currentSwiper, (newVal) => {
-  console.log('swiper1', )
-  swiper1.value.autoplay = false
-  // 暂停前一个swiper
-  const prevSwiper = newVal === 1 ? 3 : newVal - 1;
-  this.$refs[`swiper${prevSwiper}`].stop();
-  // 开始当前swiper
-  this.$refs[`swiper${newVal}`].start();
-});
-
-// 切换swiper
-setInterval(() => {
-  currentSwiper.value = currentSwiper.value === 3 ? 1 : currentSwiper.value + 1;
-}, 3000);
 </script>
 <style lang="less" scoped>
 @import './index.less';

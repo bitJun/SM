@@ -232,6 +232,45 @@
       &_info.custom {
         background: #F7F9FC;
       }
+      &_content {
+        position: relative;
+        &_bg {
+          width: 100%;
+        }
+        &_first {
+          position: absolute;
+          left: 258px !important;
+          top: 37.76px !important;
+          height: 148px !important;
+          width: 228px !important;
+          img {
+            height: 148px !important;
+            width: 228px !important;
+          }
+        }
+        &_second {
+          position: absolute;
+          left: 258px !important;
+          top: 216px !important;
+          height: 240px !important;
+          width: 392px !important;
+          img {
+            height: 240px !important;
+            width: 392px !important;
+          }
+        }
+        &_third {
+          position: absolute;
+          width: 612px !important;
+          height: 302px !important;
+          left: 37px !important;
+          bottom: 37px !important;
+          img {
+            width: 612px !important;
+            height: 302px !important;
+          }
+        }
+      }
       &_detail {
         background: #F7F9FC;
         // height: 824px;
@@ -264,8 +303,8 @@
                 border-radius: 14px;
                 margin-bottom: 30.24px;
                 img {
-                  width: 228px;
-                  height: 148px;
+                  width: 248px;
+                  height: 160px;
                 }
               }
               &_second {
@@ -325,7 +364,7 @@
       overflow: hidden;
       background: url('../../assets/images/company_bg.png');
       background-size: cover;
-      padding-bottom: 200px;
+      padding-bottom: 120px;
       box-sizing: border-box;
       &_section {
         z-index: 899;
@@ -333,7 +372,6 @@
         box-sizing: border-box;
         height: 424px;
         width: 100%;
-        // background: linear-gradient(180.16deg, #FFFFFF 0.14%, rgba(255, 255, 255, 0.859219) 60.39%, rgba(255, 255, 255, 0) 99.86%);
         position: relative;
         &_info {
           margin-bottom: 8px;
@@ -437,9 +475,11 @@
       position: absolute;
       left: 100%;
       top: -68.42px;
+      animation-iteration-count: infinite;
       -webkit-animation: linear infinite alternate;
       -webkit-animation-name: run;
-      -webkit-animation-duration: 1.2s;
+      -webkit-animation-duration: 10s;
+      animation-delay: 0s;
       animation-iteration-count: 1;/*动画只执行一次*/
       -moz-animation-iteration-count:1;
       -webkit-animation-iteration-count:1;
@@ -448,6 +488,13 @@
     }
     @-webkit-keyframes run {
       0% {
+        left: -206.36px;
+      }
+      12% {
+        right: -206.36px;
+        webkit-transform: scaleX(-1);
+      }
+      13% {
         left: -206.36px;
       }
       100% {
