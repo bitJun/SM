@@ -105,10 +105,9 @@
               class="index_view_main_section_content_bg"
             />
             <Swiper
-              ref="swiper1"
               :autoplay="swiper1Playing"
-              @transitionEnd="pauseSwiper1"
               :loop="true"
+              :speed="1000"
               class="index_view_main_section_content_first"
             >
               <SwiperSlide>
@@ -124,8 +123,8 @@
             </Swiper>
             <Swiper
               :autoplay="swiper2Playing"
-              @transitionEnd="pauseSwiper2"
               :loop="true"
+              :speed="1000"
               class="index_view_main_section_content_second"
             >
               <SwiperSlide>
@@ -141,7 +140,6 @@
             </Swiper>
             <Swiper
               :autoplay="swiper3Playing"
-              @transitionEnd="pauseSwiper3"
               :loop="true"
               :speed="1000"
               class="index_view_main_section_content_third"
@@ -225,10 +223,10 @@
   </div>
 </template>
 <script setup>
-import SwiperCore, { Autoplay } from 'swiper'
+import SwiperCore, { Autoplay } from 'swiper';
 // import Swiper from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/vue';
-import { ref, reactive, onMounted, defineComponent, nextTick } from 'vue';
+import { ref, reactive, onMounted, defineComponent, watch, nextTick } from 'vue';
 import { useRoute } from 'vue-router';
 import logoPng from '@/assets/images/logo.png';
 import logoBluePng from '@/assets/images/logo_blue.png';
@@ -264,7 +262,6 @@ SwiperCore.use(Autoplay);
 const Route = useRoute();
 const logoHeight = ref('');
 const tabsHeight = ref('');
-const currentSwiper = ref(1);
 let logoTop = ref(0);
 let tabsTop = ref(0);
 let opacity = ref(0);
@@ -356,45 +353,73 @@ const state = reactive({
   current: '',
   targetId
 })
-
-const swiper1 = ref(null);
-const swiper2 = ref(null);
-const swiper3 = ref(null);
-const swiper1Playing = ref(true);
-const swiper2Playing = ref(false);
-const swiper3Playing = ref(false);
+const swiper1Playing = ref({
+  delay: 1000,
+  disableOnInteraction: false,
+});
+const swiper2Playing = ref({
+  delay: 1000,
+  disableOnInteraction: true,
+});
+const swiper3Playing = ref({
+  delay: 1000,
+  disableOnInteraction: true,
+});
+const step = ref(1);
 const pauseSwiper1 = () => {
-  console.log(11)
-  swiper1Playing.value = false;
-  swiper2Playing.value = true;
+  swiper1Playing.value = {
+    delay: 1000,
+    disableOnInteraction: false,
+  };
+  swiper2Playing.value = {
+    delay: 1000,
+    disableOnInteraction: true,
+  };
+  swiper3Playing.value = {
+    delay: 1000,
+    disableOnInteraction: true,
+  };
 };
 
 const pauseSwiper2 = () => {
-  console.log(22)
-  swiper2Playing.value = false;
-  swiper3Playing.value = true;
+  swiper1Playing.value = {
+    delay: 1000,
+    disableOnInteraction: true,
+  };
+  swiper2Playing.value = {
+    delay: 1000,
+    disableOnInteraction: false,
+  };
+  swiper3Playing.value = {
+    delay: 1000,
+    disableOnInteraction: true,
+  };
 };
 
 const pauseSwiper3 = () => {
-  console.log(33)
-  swiper3Playing.value = false;
-  swiper1Playing.value = true;
+  swiper1Playing.value = {
+    delay: 1000,
+    disableOnInteraction: true,
+  };
+  swiper2Playing.value = {
+    delay: 1000,
+    disableOnInteraction: true,
+  };
+  swiper3Playing.value = {
+    delay: 1000,
+    disableOnInteraction: false,
+  };
 };
+
 onMounted(()=>{
-  swiper1Playing.value = true;
-  nextTick(()=>{
-    setInterval(() => {
-      console.log('swiper1', swiper1.value)
-      // console.log('swiper1Playing', swiper1Playing)
-      if (swiper1Playing.value) {
-        pauseSwiper1();
-      } else if (swiper2Playing.value) {
-        pauseSwiper2();
-      } else if (swiper3Playing.value) {
-        pauseSwiper3();
-      }
-    },4000);
-  })
+  // swiper1Playing.value = true;
+  setInterval(() => {
+   
+    step.value = step.value + 1;
+    if (step.value == 4) {
+      step.value = 1
+    }
+  }, 2000);
   let timeId;
   window.addEventListener('scroll', () => {
     clearTimeout(timeId);
@@ -408,23 +433,33 @@ onMounted(()=>{
   logoHeight.value = document.getElementById('logo').clientHeight
   tabsTop.value = document.getElementById('tabs').getBoundingClientRect().top
   tabsHeight.value = document.getElementById('tabs').clientHeight
+  Time();
+});
+
+nextTick(()=>{
   let list = document.getElementsByClassName('index_view_main_section');
-  for (let i = 0;i <list.length; i++) {
+  for (let i = 0;i <tabs.value.length; i++) {
+    let value = document.getElementById(tabs.value[i].id).offsetTop
+    if (i > 0) {
+      value =  state.topList[i - 1].value + value
+    }
     state.topList.push({
-      name: list[i].getAttribute('id'),
-      value: list[i].offsetTop
+      name: tabs.value[i].id,
+      value: value,
     });
   }
   state.sectionHeight = list[0].clientHeight;
-  Time();
-});
+  console.log('state.topList', state.topList)
+})
+
 const onClickTabView = (value) => {
   state.current = value;
   let anchor = document.getElementById(value);
   document.body.scrollTop = anchor.offsetTop;
   document.documentElement.scrollTop = anchor.offsetTop;
+  console.log('anchor.offsetTop', anchor.offsetTop)
   window.scrollTo({
-    top: anchor.offsetTop - tabsHeight.value - logoHeight.value,
+    top: anchor.offsetTop - tabsHeight.value,
 	  behavior: 'smooth'
   })
 }
@@ -452,18 +487,20 @@ const onScroll = () => {
 
 const handleScroll =()=> {
   scrollTop.value = document.documentElement.scrollTop;
-  let windowHeight = window.innerHeight;
-  let ceilHeight = windowHeight - state.sectionHeight;
-  let top = scrollTop.value + ceilHeight;
+  let top = scrollTop.value + tabsHeight.value;
   let result = {};
+  console.log('scrollTop.value', scrollTop.value)
   state.topList.forEach((item, index) => {
     if (state.topList[index + 1]) {
-      if (item.value < top && state.topList[index + 1].value > top) {
+      if (item.value < top && state.topList[index + 1].value  > top) {
         result = item
+        return false;
       }
     } else {
+      console.log(33)
       if (item.value < top) {
         result = item
+        return false;
       }
     }
   })
@@ -493,7 +530,15 @@ const Time = () => {
     countDown()
   },1000)
 }
-
+watch(step, (newval, val) => {
+  if (newval == 1) {
+    pauseSwiper1();
+  } else if (newval == 2) {
+    pauseSwiper2();
+  } else if (newval == 3) {
+    pauseSwiper3();
+  }
+})
 </script>
 <style lang="less" scoped>
 @import './index.less';
